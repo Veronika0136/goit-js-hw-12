@@ -12,11 +12,9 @@ const refs = {
   loader: document.querySelector('.loader'),
 };
 
-console.dir(refs.btnNext);
-
 let lightbox;
 const params = {
-  massege: null,
+  message: null,
   page: null,
   total: null,
   perPage: 40,
@@ -30,13 +28,13 @@ async function searchImages(e) {
   refs.gallery.innerHTML = '';
   showLoader();
 
-  const massege = e.target.elements.search.value.trim();
-  params.massege = massege;
+  const message = e.target.elements.search.value.trim();
+  params.message = message;
   params.page = 1;
 
   try {
     const result = await getAllImages(
-      params.massege,
+      params.message,
       params.page,
       params.perPage
     );
@@ -84,6 +82,29 @@ async function searchImages(e) {
   e.target.reset();
 }
 
+refs.btnNext.addEventListener('click', async () => {
+  params.page += 1;
+  showLoader();
+  hidebtnNext();
+  const result = await getAllImages(
+    params.message,
+    params.page,
+    params.perPage
+  );
+
+  const markup = imagesTemplate(result.hits);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+
+  if (lightbox) {
+    lightbox.refresh();
+  } else {
+    lightbox = new SimpleLightbox('.gallery a');
+  }
+
+  hideLoader();
+  checkBtnStatus();
+});
+
 function showLoader() {
   refs.loader.classList.remove('hidden');
   refs.gallery.classList.add('hidden');
@@ -95,11 +116,11 @@ function hideLoader() {
 }
 
 function showbtnNext() {
-  refs.btnNext.style.display = "";
+  refs.btnNext.style.display = '';
 }
 
 function hidebtnNext() {
-  refs.btnNext.style.display = "none";
+  refs.btnNext.style.display = 'none';
 }
 
 function checkBtnStatus() {
@@ -108,7 +129,10 @@ function checkBtnStatus() {
 
   if (params.page >= maxPage) {
     hidebtnNext();
-    iziToast.info('This is last page');
+    iziToast.info({
+      position: 'topRight',
+      message: "We're sorry, but you've reached the end of search results.",
+    });
   } else {
     showbtnNext();
   }
