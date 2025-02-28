@@ -10,10 +10,13 @@
   <body>
     <form class="form">
       <input type="text" name="search" required />
-      <button type="submit">Search</button>
+      <button class="form-btn" type="submit">Search</button>
     </form>
-    <div class="loader hidden"></div>
     <ul class="gallery"></ul>
+    <div class="">
+      <button class="gallery-btn" type="button" disabled>Load more</button>
+    </div>
+    <div class="loader hidden"></div>
 
     <script type="module" src="./main.js"></script>
   </body>
