@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-export async function getAllImages(massege,page,perPage) {
+export async function getAllImages(message,page,perPage) {
   const baseURL = 'https://pixabay.com/api/';
 
   const params = {
     key: '49074776-667ebd81d42a28579e0443e2e',
-    q: massege,
+    q: message,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
