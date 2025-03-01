@@ -1,5 +1,3 @@
-// window.history.scrollRestoration = 'manual';
-
 import { getAllImages } from './js/pixabay-api';
 import { imageTemplate, imagesTemplate } from './js/render-functions';
 import iziToast from 'izitoast';
@@ -111,12 +109,12 @@ refs.btnNext.addEventListener('click', async () => {
 
 function showLoader() {
   refs.loader.classList.remove('hidden');
-  refs.gallery.classList.add('hidden');
+  
 }
 
 function hideLoader() {
   refs.loader.classList.add('hidden');
-  refs.gallery.classList.remove('hidden');
+  
 }
 
 function showbtnNext() {
