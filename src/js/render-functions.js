@@ -10,7 +10,7 @@ export function imageTemplate(item) {
   } = item;
 
   return `<li class="gallery-item">
-          <a class="gallery-link" href="${largeImageURL}" onclick="return false;">
+          <a class="gallery-link" href="${largeImageURL}">
             <img
               class="gallery-image"
               src="${webformatURL}"
