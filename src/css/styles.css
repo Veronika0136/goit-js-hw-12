@@ -47,8 +47,10 @@ input:hover {
   margin-right: 50px;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
   gap: 15px;
+  
 }
 
 .gallery-item {
