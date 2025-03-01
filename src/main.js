@@ -1,3 +1,5 @@
+// window.history.scrollRestoration = 'manual';
+
 import { getAllImages } from './js/pixabay-api';
 import { imageTemplate, imagesTemplate } from './js/render-functions';
 import iziToast from 'izitoast';
@@ -15,9 +17,9 @@ const refs = {
 let lightbox;
 
 const params = {
-  message: null,
-  page: 1,
-  total: null,
+  message: '',
+  page: null,
+  total: 1,
   perPage: 40,
 };
 
@@ -28,7 +30,6 @@ refs.form.addEventListener('submit', searchImages);
 async function searchImages(e) {
   e.preventDefault();
   refs.gallery.innerHTML = '';
-  
 
   const message = e.target.elements.search.value.trim();
   params.message = message;
@@ -53,18 +54,14 @@ async function searchImages(e) {
         messageLineHeight: '24px',
         maxWidth: '432px',
       });
-     
     } else {
       const markup = imagesTemplate(result.hits);
       refs.gallery.innerHTML = markup;
       params.total = result.totalHits;
-      showbtnNext();
 
-      if (lightbox) {
-        lightbox.refresh();
-      } else {
-        lightbox = new SimpleLightbox('.gallery a');
-      }
+      checkBtnStatus();
+
+      lightbox = new SimpleLightbox('.gallery a');
     }
   } catch (error) {
     refs.gallery.innerHTML = '';
@@ -81,9 +78,6 @@ async function searchImages(e) {
     console.log(error);
   }
 
-  
-  
-
   e.target.reset();
 }
 
@@ -91,18 +85,28 @@ refs.btnNext.addEventListener('click', async () => {
   hidebtnNext();
   showLoader();
   params.page += 1;
-  const result = await getAllImages(
-    params.message,
-    params.page,
-    params.perPage
-  );
 
-  const markup = imagesTemplate(result.hits);
-  refs.gallery.insertAdjacentHTML('beforeend', markup);
-  lightbox.refresh();
-  hideLoader();
-  checkBtnStatus();
-  scrollPage();
+  try {
+    const result2 = await getAllImages(
+      params.message,
+      params.page,
+      params.perPage
+    );
+
+    const markup = imagesTemplate(result2.hits);
+    refs.gallery.insertAdjacentHTML('beforeend', markup);
+    lightbox.refresh();
+    hideLoader();
+    checkBtnStatus();
+    scrollPage();
+  } catch (error) {
+    iziToast.error({
+      title: 'Error',
+      message: 'Something went wrong. Please try again.',
+      position: 'topRight',
+    });
+    hideLoader();
+  }
 });
 
 function showLoader() {
@@ -124,10 +128,9 @@ function hidebtnNext() {
 }
 
 function checkBtnStatus() {
-  const perPage = params.perPage;
-  const maxPage = Math.ceil(params.total / perPage);
+  const maxPage = Math.ceil(params.total / params.perPage);
 
-  if (params.page >= maxPage) {
+  if (params.page >= maxPage || params.total < params.perPage) {
     hidebtnNext();
     iziToast.info({
       position: 'topRight',
@@ -141,7 +144,7 @@ function checkBtnStatus() {
 function scrollPage() {
   const info = refs.gallery.firstElementChild.getBoundingClientRect();
   const height = info.height;
-  scrollBy({
+  window.scrollBy({
     behavior: 'smooth',
     top: height * 2,
   });
