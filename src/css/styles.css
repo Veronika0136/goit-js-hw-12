@@ -4,6 +4,7 @@ body {
   font-size: 16px;
   line-height: 24px;
   color: #2e2f42;
+   height: 100%;
 }
 
 .form {
@@ -44,12 +45,10 @@ input:hover {
   padding: 0px;
   margin-left: 50px;
   margin-right: 50px;
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
-  
 }
 
 .gallery-item {
@@ -109,21 +108,21 @@ input:hover {
   height: 10px;
   margin-left: auto;
   margin-right: auto;
-  -webkit-mask:linear-gradient(90deg,#000 70%,#0000 0) 0/20%;
-  background:
-   linear-gradient(#000 0 0) 0/0% no-repeat
-   #ddd;
+  -webkit-mask: linear-gradient(90deg, #000 70%, #0000 0) 0/20%;
+  background: linear-gradient(#000 0 0) 0/0% no-repeat #ddd;
   animation: l4 2s infinite steps(6);
 }
 @keyframes l4 {
-    100% {background-size:120%}
+  100% {
+    background-size: 120%;
+  }
 }
 
 .hidden {
   display: none;
 }
 
-.gallery-btn{
+.gallery-btn {
   color: #ffffff;
   background-color: #4e75ff;
   width: 125px;
@@ -134,5 +133,4 @@ input:hover {
   display: block;
   margin-left: auto;
   margin-right: auto;
-
 }
