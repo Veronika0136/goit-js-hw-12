@@ -13,6 +13,7 @@ const refs = {
 };
 
 let lightbox;
+
 const params = {
   message: null,
   page: null,
@@ -21,12 +22,13 @@ const params = {
 };
 
 hidebtnNext();
+
 refs.form.addEventListener('submit', searchImages);
 
 async function searchImages(e) {
   e.preventDefault();
   refs.gallery.innerHTML = '';
-  showLoader();
+  
 
   const message = e.target.elements.search.value.trim();
   params.message = message;
@@ -76,16 +78,16 @@ async function searchImages(e) {
     console.log(error);
   }
 
-  hideLoader();
+  
   checkBtnStatus();
 
   e.target.reset();
 }
 
 refs.btnNext.addEventListener('click', async () => {
-  params.page += 1;
-  showLoader();
   hidebtnNext();
+  showLoader();
+  params.page += 1;
   const result = await getAllImages(
     params.message,
     params.page,
@@ -94,15 +96,10 @@ refs.btnNext.addEventListener('click', async () => {
 
   const markup = imagesTemplate(result.hits);
   refs.gallery.insertAdjacentHTML('beforeend', markup);
-
-  if (lightbox) {
-    lightbox.refresh();
-  } else {
-    lightbox = new SimpleLightbox('.gallery a');
-  }
-
+  lightbox.refresh();
   hideLoader();
   checkBtnStatus();
+  scrollPage();
 });
 
 function showLoader() {
@@ -136,4 +133,13 @@ function checkBtnStatus() {
   } else {
     showbtnNext();
   }
+}
+
+function scrollPage() {
+  const info = refs.gallery.firstElementChild.getBoundingClientRect();
+  const height = info.height;
+  scrollBy({
+    behavior: 'smooth',
+    top: height * 2,
+  });
 }
